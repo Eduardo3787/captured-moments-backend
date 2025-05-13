@@ -1,56 +1,55 @@
-import prismaClient from "../../prisma";
+import prismaClient from '../../prisma'
 
-interface RegisteredMomentProps {
-    title: string
-    story: string
-    visitedLocation: string[]
-    user: { userId: string } 
-    imageUrl: string
-    visitedDate: string
+interface RegistredMomentProps {
+  title: string
+  story: string
+  visitedLocation: string[]
+  user: { userId: string }
+  imageUrl: string
+  visitedDate: string
 }
 
-type UpdateMomentProps = RegisteredMomentProps & { id: string }
+type UpdateMomentProps = RegistredMomentProps & { id: string }
 
 class UpdateMomentsService {
-    async execute({  
-        id,
-        title,
-        story,
-        visitedLocation,
-        user,
-        imageUrl,
-        visitedDate }: UpdateMomentProps) {
-
-            const parsedVisitedDate = new Date(parseInt(visitedDate))
-
-            const registeredMoment =  await prismaClient.registeredMoment.findFirst({
-              where: {
-                id: id,
-                userId: user.userId
-              }
-            })
-            
-             if(!registeredMoment) {
-              throw new Error("Register moment not found!")
-             }
-          
-             const placeholderImageUrl = 'http://localhost:8000/uploads/papel-de-parede.jpg'
-          
-             const updatedRegisteredMoment = await prismaClient.registeredMoment.update({
-               where: {
-                id: id
-               },
-               data: {
-                  title: title,
-                  story: story,
-                  visitedLocation: visitedLocation,
-                  imageUrl: imageUrl || placeholderImageUrl,
-                  visitedDate: parsedVisitedDate
-               }
-              })
-
-         return updatedRegisteredMoment
-    }
+  async execute({ 
+    id,
+    title,
+    story,
+    visitedLocation,
+    user,
+    imageUrl,
+    visitedDate }: UpdateMomentProps) {
+    
+      const parsedVisitedDate = new Date(visitedDate)
+  
+      const registeredMoment = await prismaClient.registeredMoment.findFirst({
+        where: {
+          id: id,
+          userId: user.userId
+        }
+      })
+    
+      if(!registeredMoment) {
+        throw new Error("Register moment not found!" )
+      }
+    
+      const placeholderImageUrl = `http://localhost:8000/uploads/image-default.png`
+    
+      const updatedRegisteredMoment = await prismaClient.registeredMoment.update({
+        where: {
+          id: id
+        },
+        data: {
+          title: title,
+          story: story,
+          visitedLocation: visitedLocation,
+          imageUrl: imageUrl || placeholderImageUrl,
+          visitedDate: parsedVisitedDate
+        }
+      })
+    
+    return updatedRegisteredMoment
+  }
 }
-
 export { UpdateMomentsService }
