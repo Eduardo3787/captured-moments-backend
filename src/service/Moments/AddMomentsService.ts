@@ -6,7 +6,7 @@ interface RegistredMomentProps {
   visitedLocation: string[]
   user: { userId: string }
   imageUrl: string
-  visitedDate: string
+  visitedDate: number 
 }
 
 class AddMomentsService {
@@ -18,7 +18,7 @@ class AddMomentsService {
     imageUrl,
     visitedDate }: RegistredMomentProps) {
     const parsedVisitedDate = new Date(visitedDate)
-
+      
     const placeholderImageUrl = `http://localhost:8000/uploads/image-default.png`
 
     const registedMoment = await prismaClient.registeredMoment.create({
